@@ -23,7 +23,8 @@ void ThreadCallRingCenterTask(void const * argument)
 		}
 
 			osMutexWait(UartMutexHandle, osWaitForever);
-			while(request_to_server() != AT_OK){}; // делаем запрос на сервер
+			request_to_server(); // делаем запрос на сервер
+			//while(request_to_server() != AT_OK){}; // делаем запрос на сервер
 			osMutexRelease(UartMutexHandle);
 
 		osDelay(5000); // ждем, если флаг не сброшен запрос повторяется

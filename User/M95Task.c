@@ -322,6 +322,8 @@ void ThreadM95Task(void const * argument)
 
 			case CONNECT_OK: // Если соединение установлено
 
+				osTimerStart(Ring_Center_TimerHandle, 60000); // запускаем таймер и обнуляем его при каждом ответе о соединении.
+
 				osThreadResume(CallRingCenterTaskHandle); // пробуждаем процесс запроса к серверу
 				LED1_ON();
 				if( AT_COPS() == AT_OK )
