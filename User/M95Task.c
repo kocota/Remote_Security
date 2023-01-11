@@ -48,6 +48,9 @@ void ThreadM95Task(void const * argument)
 	osSemaphoreWait(TransmissionStateHandle, osWaitForever); // обнуляем семафор, при создании семафора его значение равно 1
 	osSemaphoreWait(ReceiveStateHandle, osWaitForever); // обнуляем семафор, при создании семафора его значение равно 1
 
+	osTimerStart(Ring_Center_TimerHandle, 60000); // запускаем таймер для перезагрузки по его окончанию
+
+	/*
 	if(AT()==AT_ERROR)
 	{
 		m95_power_on();
@@ -66,7 +69,7 @@ void ThreadM95Task(void const * argument)
 
 		}
 	}
-
+	*/
 
 	//----Обнуление регистров IP адреса и порта сервера, обнуление ID устройства------
 	// Для записи регистров раскоментировать строки и прошить контроллер
@@ -164,6 +167,7 @@ void ThreadM95Task(void const * argument)
 	*/
 
 	//---------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -322,7 +326,7 @@ void ThreadM95Task(void const * argument)
 
 			case CONNECT_OK: // Если соединение установлено
 
-				osTimerStart(Ring_Center_TimerHandle, 60000); // запускаем таймер и обнуляем его при каждом ответе о соединении.
+				//osTimerStart(Ring_Center_TimerHandle, 60000); // запускаем таймер и обнуляем его при каждом ответе о соединении.
 
 				osThreadResume(CallRingCenterTaskHandle); // пробуждаем процесс запроса к серверу
 				LED1_ON();
@@ -337,6 +341,16 @@ void ThreadM95Task(void const * argument)
 					fm25v02_write(2*SIGNAL_LEVEL_REG+1, level);
 					osMutexRelease(Fm25v02MutexHandle);
 				}
+				/*
+				if( AT_QISTAT() == AT_OK)
+				{
+					LED_VD5_TOGGLE();
+				}
+				if( AT_QIOPEN("TCP", ip1 , ip2, ip3, ip4, port) == AT_OK )
+				{
+
+				}
+				*/
 				if( request_state == 0)
 				{
 					request_state = 1;

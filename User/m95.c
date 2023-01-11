@@ -733,6 +733,34 @@ uint8_t AT_QISTATE (void)
 	return AT_ERROR;
 }
 
+uint8_t AT_QISTAT (void)
+{
+	uint8_t str_out[10];
+	sprintf(str_out, "AT+QISTAT\n");
+	read_rx_state = ACTIVE;
+	modem_rx_number = 0;
+	modem_rx_buffer_clear();
+
+	HAL_UART_Receive_DMA(&huart3, &modem_rx_data[0], 1);
+	HAL_UART_Transmit_DMA(&huart3, str_out, 10);
+
+	osSemaphoreWait(TransmissionStateHandle, osWaitForever);
+
+	osTimerStart(AT_TimerHandle, 10000);
+	while(read_rx_state == ACTIVE)
+	{
+
+		if(strstr(modem_rx_buffer, "OK\r\n") != NULL )
+		{
+			osTimerStop(AT_TimerHandle);
+			read_rx_state = NOT_ACTIVE;
+			return AT_OK;
+		}
+
+	}
+	return AT_ERROR;
+}
+
 uint8_t AT_QIHEAD (uint8_t mode) // функция для включения или отключения хидера "IPD(data lengh):" на приеме
 {
 	uint8_t str_out[12];

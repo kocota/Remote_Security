@@ -56,6 +56,7 @@ uint8_t AT_QIREGAPP  (char* apn, char* user, char* password);
 uint8_t AT_QIACT (void);
 uint8_t AT_QIDEACT (void);
 uint8_t AT_QISTATE (void);
+uint8_t AT_QISTAT (void);
 uint8_t AT_QIHEAD (uint8_t mode);
 uint8_t AT_QISHOWPT (uint8_t mode);
 uint8_t AT_QPOWD (uint8_t mode);

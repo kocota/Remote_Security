@@ -5,7 +5,7 @@
 #include "m95.h"
 
 extern osSemaphoreId ModbusPacketReceiveHandle;
-//extern osTimerId Ring_Center_TimerHandle;
+extern osTimerId Ring_Center_TimerHandle;
 extern osMutexId Fm25v02MutexHandle;
 extern osMutexId UartMutexHandle;
 
@@ -69,7 +69,7 @@ void ThreadModbusPacketTask(void const * argument)
 				if( modbus_address == VERSION_REG ) // если запрашивается адрес версии прошивки обновляем таймер перезагрузки
 				{
 					//osTimerStop(Ring_Center_TimerHandle);
-					//osTimerStart(Ring_Center_TimerHandle, 300000);
+					osTimerStart(Ring_Center_TimerHandle, 60000);
 				}
 
 
