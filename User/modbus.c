@@ -7,6 +7,7 @@ extern osMutexId Fm25v02MutexHandle;
 
 status_register_struct status_registers;
 control_register_struct control_registers;
+bootloader_register_struct bootloader_registers;
 
 //----функция чтения из памяти регистров статуса--------------------------
 void read_status_registers(void)
@@ -591,6 +592,168 @@ void read_control_registers(void)
 	fm25v02_read(2*ALARM_SWITCHING_REG, &status_reg_temp_h);
 	fm25v02_read(2*ALARM_SWITCHING_REG+1, &status_reg_temp_l);
 	control_registers.alarm_switching_reg = (((uint16_t)status_reg_temp_h)<<8)|status_reg_temp_l;
+
+	osMutexRelease(Fm25v02MutexHandle);
+
+}
+//----------------------------------------------------------------
+
+//----Функция чтения из памяти регистров бутлоадера---------------
+
+void read_bootloader_registers(void)
+{
+	uint8_t status_reg_temp_h;
+	uint8_t status_reg_temp_l;
+
+	osMutexWait(Fm25v02MutexHandle, osWaitForever);
+
+	fm25v02_read(2*BOOTLOADER_VERSION_REG, &status_reg_temp_h);
+	fm25v02_read(2*BOOTLOADER_VERSION_REG+1, &status_reg_temp_l);
+	bootloader_registers.bootloader_version_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.start_address_firmware_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_2_REG, &status_reg_temp_h);
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_2_REG+1, &status_reg_temp_l);
+	bootloader_registers.start_address_firmware_2_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_3_REG, &status_reg_temp_h);
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_3_REG+1, &status_reg_temp_l);
+	bootloader_registers.start_address_firmware_3_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*START_ADDRESS_FIRMWARE_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.start_address_firmware_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.end_address_firmware_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.end_address_firmware_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*CRC_FIRMWARE_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*CRC_FIRMWARE_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.crc_firmware_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*CRC_FIRMWARE_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*CRC_FIRMWARE_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.crc_firmware_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*JUMP_VECTOR_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*JUMP_VECTOR_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.jump_vector_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*JUMP_VECTOR_2_REG, &status_reg_temp_h);
+	fm25v02_read(2*JUMP_VECTOR_2_REG+1, &status_reg_temp_l);
+	bootloader_registers.jump_vector_2_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*JUMP_VECTOR_3_REG, &status_reg_temp_h);
+	fm25v02_read(2*JUMP_VECTOR_3_REG+1, &status_reg_temp_l);
+	bootloader_registers.jump_vector_3_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*JUMP_VECTOR_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*JUMP_VECTOR_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.jump_vector_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*FIRMWARE_CORRECTNESS_REG, &status_reg_temp_h);
+	fm25v02_read(2*FIRMWARE_CORRECTNESS_REG+1, &status_reg_temp_l);
+	bootloader_registers.firmware_correctness_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*WORKING_MODE_REG, &status_reg_temp_h);
+	fm25v02_read(2*WORKING_MODE_REG+1, &status_reg_temp_l);
+	bootloader_registers.working_mode_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*READY_DOWNLOAD_REG, &status_reg_temp_h);
+	fm25v02_read(2*READY_DOWNLOAD_REG+1, &status_reg_temp_l);
+	bootloader_registers.ready_download_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*DOWNLOAD_TIMEOUT_REG, &status_reg_temp_h);
+	fm25v02_read(2*DOWNLOAD_TIMEOUT_REG+1, &status_reg_temp_l);
+	bootloader_registers.download_timeout_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*JUMP_ATTEMPT_REG, &status_reg_temp_h);
+	fm25v02_read(2*JUMP_ATTEMPT_REG+1, &status_reg_temp_l);
+	bootloader_registers.jump_attempt_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*MAX_JUMP_ATTEMPT_REG, &status_reg_temp_h);
+	fm25v02_read(2*MAX_JUMP_ATTEMPT_REG+1, &status_reg_temp_l);
+	bootloader_registers.max_jump_attempt_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_2_REG, &status_reg_temp_h);
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_2_REG+1, &status_reg_temp_l);
+	bootloader_registers.end_address_firmware_2_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_3_REG, &status_reg_temp_h);
+	fm25v02_read(2*END_ADDRESS_FIRMWARE_3_REG+1, &status_reg_temp_l);
+	bootloader_registers.end_address_firmware_3_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*ADDRESS_TO_WRITE_2_REG, &status_reg_temp_h);
+	fm25v02_read(2*ADDRESS_TO_WRITE_2_REG+1, &status_reg_temp_l);
+	bootloader_registers.address_to_write_2_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*ADDRESS_TO_WRITE_3_REG, &status_reg_temp_h);
+	fm25v02_read(2*ADDRESS_TO_WRITE_3_REG+1, &status_reg_temp_l);
+	bootloader_registers.address_to_write_3_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*CLEAR_PAGE_NUMBER_REG, &status_reg_temp_h);
+	fm25v02_read(2*CLEAR_PAGE_NUMBER_REG+1, &status_reg_temp_l);
+	bootloader_registers.clear_page_number_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*CLEAR_PAGE_ON_REG, &status_reg_temp_h);
+	fm25v02_read(2*CLEAR_PAGE_ON_REG+1, &status_reg_temp_l);
+	bootloader_registers.clear_page_on_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*WRITE_ARRAY_REG, &status_reg_temp_h);
+	fm25v02_read(2*WRITE_ARRAY_REG+1, &status_reg_temp_l);
+	bootloader_registers.write_array_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*READ_ARRAY_REG, &status_reg_temp_h);
+	fm25v02_read(2*READ_ARRAY_REG+1, &status_reg_temp_l);
+	bootloader_registers.read_array_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*ADDRESS_TO_WRITE_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*ADDRESS_TO_WRITE_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.address_to_write_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*ADDRESS_TO_WRITE_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*ADDRESS_TO_WRITE_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.address_to_write_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*BYTE_QUANTITY_REG, &status_reg_temp_h);
+	fm25v02_read(2*BYTE_QUANTITY_REG+1, &status_reg_temp_l);
+	bootloader_registers.byte_quantity_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_CRC_HIGH_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_CRC_HIGH_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_crc_high_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_CRC_LOW_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_CRC_LOW_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_crc_low_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_DATA_0_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_DATA_0_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_data_0_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_DATA_1_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_DATA_1_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_data_1_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_DATA_2_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_DATA_2_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_data_2_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_DATA_3_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_DATA_3_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_data_3_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
+
+	fm25v02_read(2*PACKET_DATA_4_REG, &status_reg_temp_h);
+	fm25v02_read(2*PACKET_DATA_4_REG+1, &status_reg_temp_l);
+	bootloader_registers.packet_data_4_reg = ((((uint16_t)status_reg_temp_h)&0x00FF)<<8)|(((uint16_t)status_reg_temp_l)&0x00FF);
 
 	osMutexRelease(Fm25v02MutexHandle);
 

@@ -167,6 +167,52 @@ unsigned int CRC16( unsigned char * pucFrame, unsigned int usLen );
 //--------------------------------------------------------
 
 
+//----Описание регистров бутлоадера-----------------------
+
+#define BOOTLOADER_VERSION_REG           0x100
+
+#define START_ADDRESS_FIRMWARE_HIGH_REG  0x102
+#define START_ADDRESS_FIRMWARE_2_REG     0x103
+#define START_ADDRESS_FIRMWARE_3_REG     0x104
+#define START_ADDRESS_FIRMWARE_LOW_REG   0x105
+#define END_ADDRESS_FIRMWARE_HIGH_REG    0x106
+#define END_ADDRESS_FIRMWARE_LOW_REG     0x107
+#define CRC_FIRMWARE_HIGH_REG            0x108
+#define CRC_FIRMWARE_LOW_REG             0x109
+#define JUMP_VECTOR_HIGH_REG             0x10A
+#define JUMP_VECTOR_2_REG                0x10B
+#define JUMP_VECTOR_3_REG                0x10C
+#define JUMP_VECTOR_LOW_REG              0x10D
+#define FIRMWARE_CORRECTNESS_REG         0x10E
+#define WORKING_MODE_REG                 0x10F
+#define READY_DOWNLOAD_REG               0x110
+#define DOWNLOAD_TIMEOUT_REG             0x111
+#define JUMP_ATTEMPT_REG                 0x112
+#define MAX_JUMP_ATTEMPT_REG             0x113
+#define END_ADDRESS_FIRMWARE_2_REG       0x114
+#define END_ADDRESS_FIRMWARE_3_REG       0x115
+#define ADDRESS_TO_WRITE_2_REG           0x116
+#define ADDRESS_TO_WRITE_3_REG           0x117
+
+#define CLEAR_PAGE_NUMBER_REG            0x11F
+#define CLEAR_PAGE_ON_REG                0x120
+#define WRITE_ARRAY_REG                  0x121
+#define READ_ARRAY_REG                   0x122
+#define ADDRESS_TO_WRITE_HIGH_REG        0x123
+#define ADDRESS_TO_WRITE_LOW_REG         0x124
+#define BYTE_QUANTITY_REG                0x125
+#define PACKET_CRC_HIGH_REG              0x126
+#define PACKET_CRC_LOW_REG               0x127
+#define PACKET_DATA_0_REG                0x128
+#define PACKET_DATA_1_REG                0x129
+#define PACKET_DATA_2_REG                0x12A
+#define PACKET_DATA_3_REG                0x12B
+#define PACKET_DATA_4_REG                0x12C
+
+
+//--------------------------------------------------------
+
+
 //----биты состояния байта SECURITY_STATUS_REG статус режима охраны------
 
 #define RESERVED_0          0x00 // зарезервированно
@@ -401,6 +447,57 @@ typedef struct
 
 } control_register_struct;
 //------------------------------------------------------------------
+
+//----структура переменной регистров загрузчика---------------------
+
+typedef struct
+{
+	uint16_t bootloader_version_reg;
+	uint16_t start_address_firmware_high_reg;
+	uint16_t start_address_firmware_2_reg;
+	uint16_t start_address_firmware_3_reg;
+	uint16_t start_address_firmware_low_reg;
+	uint16_t end_address_firmware_high_reg;
+	uint16_t end_address_firmware_low_reg;
+	uint16_t crc_firmware_high_reg;
+	uint16_t crc_firmware_low_reg;
+	uint16_t jump_vector_high_reg;
+	uint16_t jump_vector_2_reg;
+	uint16_t jump_vector_3_reg;
+	uint16_t jump_vector_low_reg;
+	uint16_t firmware_correctness_reg;
+	uint16_t working_mode_reg;
+	uint16_t ready_download_reg;
+	uint16_t download_timeout_reg;
+	uint16_t jump_attempt_reg;
+	uint16_t max_jump_attempt_reg;
+	uint16_t end_address_firmware_2_reg;
+	uint16_t end_address_firmware_3_reg;
+	uint16_t address_to_write_2_reg;
+	uint16_t address_to_write_3_reg;
+
+	uint16_t clear_page_number_reg;
+	uint16_t clear_page_on_reg;
+	uint16_t write_array_reg;
+	uint16_t read_array_reg;
+	uint16_t address_to_write_high_reg;
+	uint16_t address_to_write_low_reg;
+	uint16_t byte_quantity_reg;
+	uint16_t packet_crc_high_reg;
+	uint16_t packet_crc_low_reg;
+	uint16_t packet_data_0_reg;
+	uint16_t packet_data_1_reg;
+	uint16_t packet_data_2_reg;
+	uint16_t packet_data_3_reg;
+	uint16_t packet_data_4_reg;
+
+
+} bootloader_register_struct;
+//------------------------------------------------------------------
+
+void read_status_registers(void);
+void read_control_registers(void);
+void read_bootloader_registers(void);
 
 
 #endif

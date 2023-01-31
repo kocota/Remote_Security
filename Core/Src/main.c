@@ -249,11 +249,11 @@ int main(void)
 
   if( ((RCC->BDCR)&0x02) != 0 ) // Проверяем, запустился ли часовой кварц, если запустился включаем светодиод
   {
-	  LED_VD4_ON();
+	  //LED_VD4_ON();
   }
   else
   {
-	  LED_VD4_OFF();
+	  //LED_VD4_OFF();
   }
 
   /* USER CODE END 2 */

@@ -11,6 +11,7 @@ extern RTC_HandleTypeDef hrtc;
 extern osMutexId Fm25v02MutexHandle;
 extern status_register_struct status_registers;
 extern control_register_struct control_registers;
+extern bootloader_register_struct bootloader_registers;
 
 RTC_TimeTypeDef current_time;
 RTC_DateTypeDef current_date;
@@ -28,6 +29,12 @@ void ThreadMainTask(void const * argument)
 
 
 	osThreadSuspend(MainTaskHandle); // ждем пока не будут вычитаны регистры и не получен статус фаз А1,А2,В1,В2,С1,С2
+
+	//osMutexWait(Fm25v02MutexHandle, osWaitForever);
+	//fm25v02_write(2*READY_DOWNLOAD_REG, 0x00);
+	//fm25v02_write(2*READY_DOWNLOAD_REG+1, 0x00);
+	//bootloader_registers.ready_download_reg = 0x0000;
+	//osMutexRelease(Fm25v02MutexHandle);
 
 
 	for(;;)
@@ -312,6 +319,15 @@ void ThreadMainTask(void const * argument)
 				fm25v02_write(2*ADDRESS_LAST_EVENT_L_REG, 0x00);
 				fm25v02_write(2*ADDRESS_LAST_EVENT_L_REG+1, 0x00);
 				osMutexRelease(Fm25v02MutexHandle);
+
+			break;
+		}
+
+		switch(bootloader_registers.working_mode_reg)
+		{
+			case(1):
+
+				NVIC_SystemReset();
 
 			break;
 		}
