@@ -227,11 +227,17 @@ unsigned int CRC16( unsigned char * pucFrame, unsigned int usLen );
 //-----------------------------------------------------------------------
 
 //----биты security_control регистра-------------------------------------
+//#define DISABLE_FROM_SERVER      0x02 // отключить из центра
+//#define ENABLE_FROM_SERVER       0x01 // включить из центра
+//#define DISABLE_FROM_IBUTTON     0x00 // отключить с таблетки
+//#define ENABLE_FROM_IBUTTON      0x03 // ввключить с таблетки
+//#define SECURITY_CONTROL_DEFAULT 0x04 // состояние покоя
+
 #define DISABLE_FROM_SERVER      0x02 // отключить из центра
 #define ENABLE_FROM_SERVER       0x01 // включить из центра
-#define DISABLE_FROM_IBUTTON     0x00 // отключить с таблетки
+#define DISABLE_FROM_IBUTTON     0x04 // отключить с таблетки
 #define ENABLE_FROM_IBUTTON      0x03 // ввключить с таблетки
-#define SECURITY_CONTROL_DEFAULT 0x04 // состояние покоя
+#define SECURITY_CONTROL_DEFAULT 0x00 // состояние покоя
 //-----------------------------------------------------------------------
 
 //----биты time_update регистра------------------------------------------
