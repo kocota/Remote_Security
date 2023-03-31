@@ -50,6 +50,8 @@ void ThreadSecurityTask(void const * argument)
 	status_registers.lighting_status_reg = 0x0000;
 	osMutexRelease(Fm25v02MutexHandle);
 
+	osDelay(5000);
+
 
 	for(;;)
 	{
@@ -664,7 +666,7 @@ void ThreadSecurityTask(void const * argument)
 
 
 
-		if( (status_registers.security_status_reg == ENABLED_BY_IBUTTON) || (status_registers.security_status_reg == ENABLED_BY_SERVER) ) // если режим охраны включен таблеткой или из центра
+		if( (status_registers.security_status_reg == ENABLED_BY_IBUTTON) || (status_registers.security_status_reg == ENABLED_BY_SERVER) && (status_registers.power_on_reg == 1) ) // если основное питание есть и режим охраны включен таблеткой или из центра
 		{
 
 			//----Контроль шлейфа №1--------------------------------------------------------------------------------------------------------------------------------

@@ -162,6 +162,7 @@ unsigned int CRC16( unsigned char * pucFrame, unsigned int usLen );
 #define MAX_CURRENT_PHASE_C              0x10C6 // (4294) максммальный ток фаза С
 #define LIGHTING_SWITCHING_REG           0x10C7 // (4295) включение функции освещения (1 - функция освещения включена, 0 - функция освещения выключена)
 #define ALARM_SWITCHING_REG              0x10C8 // (4296) включение охранной функции (1 - функция охраны включена, 0 - функция охраны выключена)
+#define ARMING_TIMELEFT                  0x10C9 // (4297) время постановки на охрану
 
 
 //--------------------------------------------------------
@@ -223,6 +224,7 @@ unsigned int CRC16( unsigned char * pucFrame, unsigned int usLen );
 #define DOOR_OPEN_ALARM     0x05 // тревога открытия двери
 #define ARMING_PROCESS      0x06 // процесс постановки на охрану
 #define ARMING_ERROR        0x07 // не удается поставить на охрану
+#define DOOR_OPEN_POWER_OFF 0x08 // открытие двери плюс отключение основного питания
 
 //-----------------------------------------------------------------------
 
@@ -449,6 +451,7 @@ typedef struct
 	uint16_t max_current_phase_c;
 	uint16_t lighting_switching_reg;
 	uint16_t alarm_switching_reg;
+	uint16_t arming_timeleft_reg;
 
 
 } control_register_struct;

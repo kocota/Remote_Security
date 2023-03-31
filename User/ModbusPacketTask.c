@@ -138,6 +138,14 @@ void ThreadModbusPacketTask(void const * argument)
 
 					}
 
+					if( modbus_address == METER_ID_LOW_REG) // тест
+					{
+						osMutexWait(Fm25v02MutexHandle, osWaitForever);
+						fm25v02_write(2*CE_303_ERROR_REG, 0x00);
+						fm25v02_write(2*CE_303_ERROR_REG+1, 0x01);
+						osMutexRelease(Fm25v02MutexHandle);
+					}
+
 				}
 
 

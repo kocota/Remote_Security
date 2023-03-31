@@ -138,7 +138,7 @@ void ThreadArmingTask(void const * argument)
 			//--------------------------------------------------------------------------------------------------------------------------------------------------
 
 			arming_time_counter++;
-			if( arming_time_counter >800)
+			if( arming_time_counter > control_registers.arming_timeleft_reg)
 			{
 				arming_time_counter = 0;
 				control_loop_arming = 0;

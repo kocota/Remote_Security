@@ -116,9 +116,9 @@ void ThreadM95Task(void const * argument)
 	//fm25v02_write(2*POWER_ON_LIGHTING_REG, 0x00);
 	//fm25v02_write(2*POWER_ON_LIGHTING_REG+1, 0x00);
 	//fm25v02_write(2*ID_HIGH_REG, 0);
-	//fm25v02_write(2*ID_HIGH_REG+1, 1);
+	//fm25v02_write(2*ID_HIGH_REG+1, 0);
 	//fm25v02_write(2*ID_LOW_REG, 0);
-	//fm25v02_write(2*ID_LOW_REG+1, 15);
+	//fm25v02_write(2*ID_LOW_REG+1, 0);
 
 	//fm25v02_write(2*IP_1_REG, 0);
 	//fm25v02_write(2*IP_1_REG+1, 195);
@@ -154,8 +154,8 @@ void ThreadM95Task(void const * argument)
 	// сервер сигнализации резерв. Не определено 271
 	/*
 	osMutexWait(Fm25v02MutexHandle, osWaitForever);
-	fm25v02_write(ID_HIGH_REG, 1);
-	fm25v02_write(ID_LOW_REG, 15);
+	fm25v02_write(ID_HIGH_REG, 0);
+	fm25v02_write(ID_LOW_REG, 0);
 
 	fm25v02_write(IP_1_REG, 195);
 	fm25v02_write(IP_2_REG, 208);

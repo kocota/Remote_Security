@@ -120,6 +120,8 @@ uint8_t meter_data[256];
 uint8_t meter_rx_buffer[256];
 uint8_t meter_rx_number = 0;
 
+volatile uint8_t modem_reset_state = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -916,7 +918,8 @@ void Callback_AT_Timer(void const * argument)
 
 void Callback_Ring_Center_Timer(void const * argument)
 {
-	NVIC_SystemReset();
+	modem_reset_state = 1;
+	//NVIC_SystemReset();
 }
 
 /* USER CODE END 4 */

@@ -3,8 +3,9 @@
 #include "cmsis_os.h"
 #include "gpio.h"
 #include "fm25v02.h"
+#include "m95.h"
 
-
+extern osThreadId M95TaskHandle;
 extern osThreadId MainTaskHandle;
 extern osThreadId EventWriteTaskHandle;
 extern RTC_HandleTypeDef hrtc;
@@ -12,6 +13,8 @@ extern osMutexId Fm25v02MutexHandle;
 extern status_register_struct status_registers;
 extern control_register_struct control_registers;
 extern bootloader_register_struct bootloader_registers;
+
+volatile uint8_t modem_reset_state;
 
 RTC_TimeTypeDef current_time;
 RTC_DateTypeDef current_date;
@@ -42,7 +45,8 @@ void ThreadMainTask(void const * argument)
 
 		if( HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_0) == GPIO_PIN_SET ) // проверяем если есть наличие единицы на пине PFO микросхемы TPS3306-15
 		{
-			if(status_registers.power_on_reg == 0) // если основного питания до этого не было, записываем в регистр наличия питания 1
+			if(status_registers.power_on_reg != 1)
+			//if(status_registers.power_on_reg == 0) // если основного питания до этого не было, записываем в регистр наличия питания 1
 			{
 				osMutexWait(Fm25v02MutexHandle, osWaitForever);
 				fm25v02_write(2*POWER_ON_REG, 0x00);
@@ -67,6 +71,7 @@ void ThreadMainTask(void const * argument)
 		else // если на пине PFO микросхемы TPS3306-15 нет наличия единицы
 		{
 			if(status_registers.power_on_reg == 1)
+			//if(status_registers.power_on_reg != 0)
 			{
 				osMutexWait(Fm25v02MutexHandle, osWaitForever);
 				fm25v02_write(2*POWER_ON_REG, 0x00);
@@ -74,15 +79,31 @@ void ThreadMainTask(void const * argument)
 				status_registers.power_on_reg = 0;
 				osMutexRelease(Fm25v02MutexHandle);
 
-				osMutexWait(Fm25v02MutexHandle, osWaitForever);
-				fm25v02_write(2*GPRS_CALL_REG, 0x00);
-				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
-				osMutexRelease(Fm25v02MutexHandle);
+				//osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				//fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				//fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
+				//osMutexRelease(Fm25v02MutexHandle);
 
 				osMutexWait(Fm25v02MutexHandle, osWaitForever);
 				fm25v02_write(2*SYSTEM_STATUS_REG, 0x00);
 				fm25v02_write(2*SYSTEM_STATUS_REG+1, POWER_OFF);
 				status_registers.system_status_reg = POWER_OFF;
+				osMutexRelease(Fm25v02MutexHandle);
+
+				//---- тест -------------------------------------------------
+				if(status_registers.security_status_reg == DOOR_OPEN_ALARM)
+				{
+					osMutexWait(Fm25v02MutexHandle, osWaitForever);
+					fm25v02_write(2*SECURITY_STATUS_REG, 0x00);
+					fm25v02_write(2*SECURITY_STATUS_REG+1, 0x08);
+					status_registers.security_status_reg = 0x08;
+					osMutexRelease(Fm25v02MutexHandle);
+				}
+				//-----------------------------------------------------------
+
+				osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
 				osMutexRelease(Fm25v02MutexHandle);
 
 				osThreadResume(EventWriteTaskHandle);
@@ -104,15 +125,20 @@ void ThreadMainTask(void const * argument)
 				fm25v02_write(2*SECURITY_STATUS_REG+1, DISABLED_BY_SERVER);
 				osMutexRelease(Fm25v02MutexHandle);
 
-				osMutexWait(Fm25v02MutexHandle, osWaitForever);
-				fm25v02_write(2*GPRS_CALL_REG, 0x00);
-				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
-				osMutexRelease(Fm25v02MutexHandle);
+				//osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				//fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				//fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
+				//osMutexRelease(Fm25v02MutexHandle);
 
 				osMutexWait(Fm25v02MutexHandle, osWaitForever);
 				fm25v02_write(2*SYSTEM_STATUS_REG, 0x00);
 				fm25v02_write(2*SYSTEM_STATUS_REG+1, TURN_OFF_STATE_ALARM);
 				status_registers.system_status_reg = TURN_OFF_STATE_ALARM;
+				osMutexRelease(Fm25v02MutexHandle);
+
+				osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
 				osMutexRelease(Fm25v02MutexHandle);
 
 				osThreadResume(EventWriteTaskHandle);
@@ -145,15 +171,20 @@ void ThreadMainTask(void const * argument)
 				fm25v02_write(2*SECURITY_STATUS_REG+1, DISABLED_BY_IBUTTON);
 				osMutexRelease(Fm25v02MutexHandle);
 
-				osMutexWait(Fm25v02MutexHandle, osWaitForever);
-				fm25v02_write(2*GPRS_CALL_REG, 0x00);
-				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
-				osMutexRelease(Fm25v02MutexHandle);
+				//osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				//fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				//fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
+				//osMutexRelease(Fm25v02MutexHandle);
 
 				osMutexWait(Fm25v02MutexHandle, osWaitForever);
 				fm25v02_write(2*SYSTEM_STATUS_REG, 0x00);
 				fm25v02_write(2*SYSTEM_STATUS_REG+1, TURN_OFF_STATE_ALARM);
 				status_registers.system_status_reg = TURN_OFF_STATE_ALARM;
+				osMutexRelease(Fm25v02MutexHandle);
+
+				osMutexWait(Fm25v02MutexHandle, osWaitForever);
+				fm25v02_write(2*GPRS_CALL_REG, 0x00);
+				fm25v02_write(2*GPRS_CALL_REG+1, CALL_ON);
 				osMutexRelease(Fm25v02MutexHandle);
 
 				osThreadResume(EventWriteTaskHandle);
@@ -332,6 +363,16 @@ void ThreadMainTask(void const * argument)
 			break;
 		}
 
+		if( modem_reset_state == 1)
+		{
+			osMutexWait(Fm25v02MutexHandle, osWaitForever); // ждем освобождение мьютекса записи в память
+			osThreadSuspend(M95TaskHandle);
+			modem_reset_state = 0;
+			//AT_QPOWD(0);
+			m95_power_off();
+			HAL_Delay(5000);
+			NVIC_SystemReset();
+		}
 
 
 		osDelay(500);

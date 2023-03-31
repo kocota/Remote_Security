@@ -92,6 +92,19 @@ void ThreadLedTask(void const * argument)
 				}
 
 			break;
+
+			case(DOOR_OPEN_POWER_OFF): // Если тревога открытия двери
+
+				door_open_alarm_counter++; // увеличиваем значение счетчика времени для процесса тревоги открытия двери
+
+				if(door_open_alarm_counter>=20)
+				{
+					door_open_alarm_counter = 0;
+					LED_OUT_TOGGLE();
+					LED2_TOGGLE();
+				}
+
+			break;
 		}
 
 

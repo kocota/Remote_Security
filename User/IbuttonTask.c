@@ -34,9 +34,12 @@ void ThreadIbuttonTask(void const * argument)
 	fm25v02_read(2*SECURITY_STATUS_REG+1, &temp); // читаем младший байт статуса режима охраны
 	osMutexRelease(Fm25v02MutexHandle);
 
-	if( (temp<0)||(temp>7) ) // если младший байт статуса режима охраны не входит в диапазон режимов статуса охраны, то обнуляем младший байт статуса режима охраны
+	if( (temp<0)||(temp>8) ) // если младший байт статуса режима охраны не входит в диапазон режимов статуса охраны, то обнуляем младший байт статуса режима охраны
 	{
+		osMutexWait(Fm25v02MutexHandle, osWaitForever);
+		fm25v02_write(2*SECURITY_STATUS_REG, 0x00);
 		fm25v02_write(2*SECURITY_STATUS_REG+1, 0x00); // обнуляем младший байт статуса режима охраны
+		osMutexRelease(Fm25v02MutexHandle);
 	}
 
 	for(;;)
@@ -95,7 +98,7 @@ void ThreadIbuttonTask(void const * argument)
 
 			  		}
 
-					else if( (status_registers.security_status_reg == ENABLED_BY_IBUTTON) || (status_registers.security_status_reg == ENABLED_BY_SERVER) || ( status_registers.security_status_reg == DOOR_OPEN_ALARM ) || ( status_registers.security_status_reg == ARMING_ERROR ) ) // если сигнализация включена, снимаем с охраны
+					else if( (status_registers.security_status_reg == ENABLED_BY_IBUTTON) || (status_registers.security_status_reg == ENABLED_BY_SERVER) || ( status_registers.security_status_reg == DOOR_OPEN_ALARM ) || ( status_registers.security_status_reg == ARMING_ERROR ) || ( status_registers.security_status_reg == DOOR_OPEN_POWER_OFF) ) // если сигнализация включена, снимаем с охраны
 			  		{
 
 						osMutexWait(Fm25v02MutexHandle, osWaitForever);
