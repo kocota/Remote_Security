@@ -256,7 +256,7 @@ HAL_StatusTypeDef ibutton_search_rom(IbuttonROM_Struct* id)
 	return HAL_ERROR;
 	*/
 }
-
+/*
 HAL_StatusTypeDef ibutton_write_rom(IbuttonROM_Struct* id)
 {
 	uint8_t temp_data;
@@ -328,3 +328,4 @@ HAL_StatusTypeDef ibutton_delete_rom(IbuttonROM_Struct* id)
 	return HAL_ERROR; // Нет ID в памяти
 
 }
+*/

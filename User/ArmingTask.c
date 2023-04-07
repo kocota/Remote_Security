@@ -148,8 +148,10 @@ void ThreadArmingTask(void const * argument)
 					osMutexWait(Fm25v02MutexHandle, osWaitForever);
 					fm25v02_write(2*SECURITY_CONTROL_REG, 0x00);
 					fm25v02_write(2*SECURITY_CONTROL_REG+1, SECURITY_CONTROL_DEFAULT);
+					control_registers.security_control_reg = SECURITY_CONTROL_DEFAULT;
 					fm25v02_write(2*SECURITY_STATUS_REG, 0x00);
 					fm25v02_write(2*SECURITY_STATUS_REG+1, security_control_temp);
+					status_registers.security_status_reg = security_control_temp;
 					osMutexRelease(Fm25v02MutexHandle);
 
 					osMutexWait(Fm25v02MutexHandle, osWaitForever);
@@ -170,8 +172,10 @@ void ThreadArmingTask(void const * argument)
 					osMutexWait(Fm25v02MutexHandle, osWaitForever);
 					fm25v02_write(2*SECURITY_CONTROL_REG, 0x00);
 					fm25v02_write(2*SECURITY_CONTROL_REG+1, SECURITY_CONTROL_DEFAULT);
+					control_registers.security_control_reg = SECURITY_CONTROL_DEFAULT;
 					fm25v02_write(2*SECURITY_STATUS_REG, 0x00);
 					fm25v02_write(2*SECURITY_STATUS_REG+1, ARMING_ERROR);
+					status_registers.security_status_reg = ARMING_ERROR;
 					osMutexRelease(Fm25v02MutexHandle);
 
 					osMutexWait(Fm25v02MutexHandle, osWaitForever);

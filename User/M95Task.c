@@ -107,7 +107,7 @@ void ThreadM95Task(void const * argument)
 	// сервер освещения Главный, неопределено 239
 
 	osMutexWait(Fm25v02MutexHandle, osWaitForever);
-	fm25v02_write(2*VERSION_REG, 0x01);
+	fm25v02_write(2*VERSION_REG, 0x02);
 	fm25v02_write(2*VERSION_REG+1, 0x0E);
 	//fm25v02_write(2*LIGHTING_SWITCHING_REG, 0x00);
 	//fm25v02_write(2*LIGHTING_SWITCHING_REG+1, 0x01);
@@ -115,29 +115,32 @@ void ThreadM95Task(void const * argument)
 	//fm25v02_write(2*POWER_ON_REG+1, 0x00);
 	//fm25v02_write(2*POWER_ON_LIGHTING_REG, 0x00);
 	//fm25v02_write(2*POWER_ON_LIGHTING_REG+1, 0x00);
-	//fm25v02_write(2*ID_HIGH_REG, 0);
-	//fm25v02_write(2*ID_HIGH_REG+1, 0);
-	//fm25v02_write(2*ID_LOW_REG, 0);
-	//fm25v02_write(2*ID_LOW_REG+1, 0);
 
-	//fm25v02_write(2*IP_1_REG, 0);
-	//fm25v02_write(2*IP_1_REG+1, 195);
+/*
+	fm25v02_write(2*ID_HIGH_REG, 0);
+	fm25v02_write(2*ID_HIGH_REG+1, 1);
 
-	//fm25v02_write(2*IP_2_REG, 0);
-	//fm25v02_write(2*IP_2_REG+1, 208);
+	fm25v02_write(2*ID_LOW_REG, 0);
+	fm25v02_write(2*ID_LOW_REG+1, 15);
 
-	//fm25v02_write(2*IP_3_REG, 0);
-	//fm25v02_write(2*IP_3_REG+1, 163);
+	fm25v02_write(2*IP_1_REG, 0);
+	fm25v02_write(2*IP_1_REG+1, 195);
 
-	//fm25v02_write(2*IP_4_REG, 0);
-	//fm25v02_write(2*IP_4_REG+1, 67);
+	fm25v02_write(2*IP_2_REG, 0);
+	fm25v02_write(2*IP_2_REG+1, 208);
 
-	//fm25v02_write(2*PORT_HIGH_REG, 0);
-	//fm25v02_write(2*PORT_HIGH_REG+1, 136);
+	fm25v02_write(2*IP_3_REG, 0);
+	fm25v02_write(2*IP_3_REG+1, 163);
 
-	//fm25v02_write(2*PORT_LOW_REG, 0);
-	//fm25v02_write(2*PORT_LOW_REG+1, 234);
+	fm25v02_write(2*IP_4_REG, 0);
+	fm25v02_write(2*IP_4_REG+1, 67);
 
+	fm25v02_write(2*PORT_HIGH_REG, 0);
+	fm25v02_write(2*PORT_HIGH_REG+1, 136);
+
+	fm25v02_write(2*PORT_LOW_REG, 0);
+	fm25v02_write(2*PORT_LOW_REG+1, 234);
+*/
 
 	//fm25v02_write(2*STATUS_LOOP_REG, 0);
 	//fm25v02_write(2*STATUS_LOOP_REG+1, 0);
